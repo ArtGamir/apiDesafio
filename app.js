@@ -7,8 +7,8 @@ const routes = require("./src/routes/index");
 const db = require("./src/utils/db");
 const cors = require("cors");
 
-db.connect();
-app.use(cors());
+
+app.use(cors("*"));
 app.use(express.json());
 
 app.use(morgan("dev"));
@@ -16,12 +16,16 @@ app.use(morgan("dev"));
 app.use("/", routes);
 
 app.use((resp, req, res, next) => {
-res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type')
+
   res.status(resp.status).send(resp.send).token(resp.token);
 });
 
-app.listen(port, () => {
-  console.log(`Server is listening in port ${port}`);
+db.connect()
+.then(() => {
+  app.listen(port, () => {
+    console.log(`Server is listening in port ${port}`);
+  });
+})
+.catch((error) => {
+  console.log("DB connection error", error);
 });
