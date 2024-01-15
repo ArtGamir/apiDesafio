@@ -16,7 +16,9 @@ app.use(morgan("dev"));
 app.use("/", routes);
 
 app.use((resp, req, res, next) => {
-  //res.status(resp.status).send(resp.send)
+res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type')
   res.status(resp.status).send(resp.send).token(resp.token);
 });
 
